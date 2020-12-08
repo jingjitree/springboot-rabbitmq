@@ -1,0 +1,17 @@
+spring:
+  profiles: dev
+
+  rabbitmq:
+    host: 192.168.1.30
+    username: tree
+    password: tree
+    port: 5672
+    virtual-host: /tree_host
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.1.30:3306/springboot?characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8
+    username: root
+    password: shihuai1993A
+
+
