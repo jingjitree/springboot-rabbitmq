@@ -42,7 +42,9 @@ spring:
       type: com.alibaba.druid.pool.DruidDataSource
 
 mybatis:
-  mapperLocations: classpath:mappers/*.xml
+  config-location: classpath:mybatis-config.xml
+  type-aliases-package: top.inson.rabbitmq.entity
+  mapper-locations: classpath:mappers/**/*.xml
 
 logging:
   config: classpath:logback-black.xml
