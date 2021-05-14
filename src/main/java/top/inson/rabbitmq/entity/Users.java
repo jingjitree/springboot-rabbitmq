@@ -19,5 +19,7 @@ public class Users extends BaseEntity<Users> implements java.io.Serializable{
     private String phone;
     private String address;
 
+    private Integer userType;
+
 
 }
