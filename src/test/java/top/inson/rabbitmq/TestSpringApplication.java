@@ -1,8 +1,9 @@
 package top.inson.rabbitmq;
 
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,9 +15,12 @@ import tk.mybatis.mapper.entity.Example;
 import top.inson.rabbitmq.constants.RabbitmqConstant;
 import top.inson.rabbitmq.dao.IUsersMapper;
 import top.inson.rabbitmq.entity.Users;
+import top.inson.rabbitmq.enums.UserTypeEnum;
 import top.inson.rabbitmq.mq.MqSender;
 
+import javax.sql.DataSource;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @SpringBootTest
@@ -30,8 +34,18 @@ public class TestSpringApplication {
     private IUsersMapper usersMapper;
     @Autowired
     private ApplicationContext context;
+    @Autowired
+    private DataSource dataSource;
 
 
+    private final Gson gson = new GsonBuilder().create();
+    @Test
+    public void testData(){
+        log.info("data:" + dataSource);
+        int code = UserTypeEnum.STUDENT.getCode();
+        String desc = UserTypeEnum.STUDENT.getDesc();
+        log.info("code:" + code);
+    }
 
     @Test
     public void testValue(){
@@ -41,22 +55,23 @@ public class TestSpringApplication {
 
     @Test
     public void testSendMsg(){
-        JSONObject message = new JSONObject();
+        Map<String, Object> message = Maps.newHashMap();
+
         message.put("payOrderId", "202011301506057101006912290757");
         message.put("status", "success");
-        log.info("发送到消息队列：{}", message.toJSONString());
+        log.info("发送到消息队列：{}", gson.toJson(message));
 
-        mqSender.send(rabbitmqConstant.getExchangeName(), rabbitmqConstant.getRoutingKey(), message.toJSONString());
-        mqSender.send(rabbitmqConstant.getDelayExchange(), rabbitmqConstant.getDelayRoutingKey(), message.toString(), 1000);
+        mqSender.send(rabbitmqConstant.getExchangeName(), rabbitmqConstant.getRoutingKey(), gson.toJson(message));
+        mqSender.send(rabbitmqConstant.getDelayExchange(), rabbitmqConstant.getDelayRoutingKey(), gson.toJson(message), 1000);
     }
 
     @Test
     public void testTkMybatis(){
         Example example = new Example(Users.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("account", "jingjitree");
+        example.createCriteria()
+                .andEqualTo("account", "jingjitree");
         List<Users> users = usersMapper.selectByExample(example);
-        log.info("查询到的数据：{}", JSON.toJSONString(users));
+        log.info("查询到的数据：{}", gson.toJson(users));
 
     }
 
