@@ -1,7 +1,8 @@
 package top.inson.rabbitmq;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TestLambda {
 
+    private final Gson gson = new GsonBuilder().create();
     @Test
     public void testList(){
         Users users = new Users();
@@ -35,7 +37,7 @@ public class TestLambda {
                 .setSex(3)
                 .setId(3);
 
-        log.info("users2:{}", JSON.toJSONString(users2));
+        log.info("users2:{}", gson.toJson(users2));
 
         List<Users> lists = Lists.newArrayList();
         lists.add(users);
@@ -46,7 +48,7 @@ public class TestLambda {
         log.info("ids:{}", ids);
         //需求：将性别相同的人分类
         Map<Integer, Users> usersMap = lists.stream().collect(Collectors.toMap(Users::getSex, u -> u));
-        log.info("usersMap:{}", JSON.toJSONString(usersMap));
+        log.info("usersMap:{}", gson.toJson(usersMap));
 
 
     }
