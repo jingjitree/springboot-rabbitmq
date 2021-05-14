@@ -6,6 +6,8 @@ server:
 spring:
   profiles:
     active: @profile.active@
+  jackson:
+    time-zone: GMT+8
 
   datasource:
     druid:
@@ -45,6 +47,9 @@ mybatis:
   config-location: classpath:mybatis-config.xml
   type-aliases-package: top.inson.rabbitmq.entity
   mapper-locations: classpath:mappers/**/*.xml
+
+mapper:
+  mappers: top.inson.rabbitmq.base.ITKBaseMapper
 
 logging:
   config: classpath:logback-black.xml
