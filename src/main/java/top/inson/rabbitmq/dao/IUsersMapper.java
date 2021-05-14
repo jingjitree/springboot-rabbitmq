@@ -1,8 +1,8 @@
 package top.inson.rabbitmq.dao;
 
-import tk.mybatis.mapper.common.Mapper;
+import top.inson.rabbitmq.base.ITKBaseMapper;
 import top.inson.rabbitmq.entity.Users;
 
-public interface IUsersMapper extends Mapper<Users> {
+public interface IUsersMapper extends ITKBaseMapper<Users> {
 
 }
